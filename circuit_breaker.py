@@ -1,55 +1,31 @@
 #!/usr/bin/env python3
 
 import requests
-import time
+from circuitbreaker import CircuitBreaker, circuit
 
-FAILURE_THRESHOLD = 3
-RECOVERY_TIMEOUT = 10
-
+# Define the URL and parameters
 url = "http://localhost:15000/status"
 params = {
     'password': 'bar',
     'smsc': 'ETISALAT_NG2'
 }
 
-consecutive_failures = 0
-circuit_opened = False
-last_failure_time = 0
-
+# Define the circuit breaker
+@CircuitBreaker(failure_threshold=3, recovery_timeout=10)
 def make_request():
-    global consecutive_failures, circuit_opened, last_failure_time
-    try:
-        response = requests.get(url, params=params)
-        if response.status_code == 200:
-            print("Request successful:", response.text)
-            consecutive_failures = 0
-            circuit_opened = False
-        else:
-            handle_failure()
-    except Exception as e:
-        handle_failure()
+    response = requests.get(url, params=params)
+    return response
 
-def handle_failure():
-    global consecutive_failures, circuit_opened, last_failure_time
-    consecutive_failures += 1
-    if consecutive_failures >= FAILURE_THRESHOLD:
-        circuit_opened = True
-        last_failure_time = time.time()
-        print("Circuit opened. Waiting for recovery...")
-    else:
-        print("Failure occurred. Count:", consecutive_failures)
-
+# Function to trigger the request
 def trigger_request():
-    global circuit_opened, last_failure_time
-    if circuit_opened:
-        if time.time() - last_failure_time >= RECOVERY_TIMEOUT:
-            print("Circuit recovered. Trying request again.")
-            circuit_opened = False
-            make_request()
+    try:
+        result = make_request()
+        if result.status_code == 200:
+            print("Request successful:", result.text)
         else:
-            print("Circuit still open. Waiting for recovery...")
-    else:
-        make_request()
+            print("Request failed with status code:", result.status_code)
+    except Exception as e:
+        print("Error making request:", str(e))
 
 # Trigger the request
 trigger_request()
