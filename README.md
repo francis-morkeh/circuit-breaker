@@ -31,6 +31,11 @@ This Python script utilizes a circuit breaker pattern to handle HTTP requests to
    ./circuit_breaker.py
    ```
 
+   To make the script run continuously in the background on a Linux server
+   ```bash
+   nohup ./circuit_breaker.py > output.log 2>&1 &
+   ```
+   
 2. Functionality
 
 The script sends an HTTP GET request to http://localhost:15000/status with predefined parameters ('password': 'bar', 'smsc': 'ETISALAT_NG2'). It utilizes a circuit breaker pattern to manage potential failures or overloads when making the request.
