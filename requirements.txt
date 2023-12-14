@@ -2,5 +2,8 @@ certifi==2023.11.17
 charset-normalizer==2.0.12
 circuitbreaker==2.0.0
 idna==3.6
+python-http-client==3.3.7
 requests==2.27.1
+sendgrid==6.11.0
+starkbank-ecdsa==2.2.0
 urllib3==1.26.18
