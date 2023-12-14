@@ -3,6 +3,12 @@
 """
 Circuit Breaker Script
 
+Author:
+Francis Morkeh Mensah
+
+Date: 
+14TH December 2023
+
 Description:
 Monitors a URL using a circuit breaker pattern, handling failures and sending email alerts.
 Uses 'requests' for HTTP, 'circuitbreaker' for circuit state, and a command-line tool for emails.
@@ -14,11 +20,6 @@ Tutor:
 
 Purpose:
 Ensure resilient monitoring, prevent cascading failures, and notify through email in case of issues.
-
-Author:
-Francis Morkeh Mensah
-
-Date: 14TH December 2023
 """
 
 import requests
